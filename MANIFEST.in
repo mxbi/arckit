@@ -1,0 +1,2 @@
+include setup.cfg
+recursive-include arckit *
