@@ -1,8 +1,12 @@
 # arckit
 
+
+
 ![Example visualisation of ARC grids](./allgrids10.svg)
 
-Python and command-line tools for easily working with the Abstraction &amp; Reasoning Corpus (ARC) dataset. 
+[![PyPI version](https://badge.fury.io/py/arckit.svg)](https://badge.fury.io/py/arckit)
+
+Python and command-line tools for easily working with the **Abstraction &amp; Reasoning Corpus** (ARC) dataset. 
 
 ```bash
 pip install arckit
