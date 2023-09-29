@@ -81,6 +81,8 @@ def draw_grid(grid, xmax=10, ymax=10, padding=.5, extra_bottom_padding=0.5, grou
     bw = border_width / 3 # slightly more than 2 to avoid white border
     drawing.append(drawsvg.Rectangle(-bw, -bw, xsize+bw*2, ysize+bw*2, fill='none', stroke=bordercol, stroke_width=border_width))
 
+    drawing.embed_google_font('Anuphan:wght@400;600;700', text=set(f'Input Output 0123456789x Test Task ABCDEFGHIJ? abcdefghjklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
+
     # Write size on the bottom right
     # drawing.append(drawsvg.Text(text=f'{gridx}x{gridy}', x=-0.05, y=-0.25, font_size=padding/4, fill='black', text_anchor='start'))
     fontsize = (padding/2 + extra_bottom_padding)/2
