@@ -14,7 +14,7 @@ Arckit provides tools for loading the data in a friendly format (without a separ
 
 ## 🐍 Python API
 
-**Loading the dataset**
+### Loading the dataset
 
 ```python
 >>> import arckit
@@ -34,7 +34,7 @@ True
 >>> task = arckit.load_task('007bbfb7')
 ```
 
-**Interacting with tasks**
+### Interacting with tasks
 
 ```python
 >>> task.dataset
@@ -71,7 +71,7 @@ array([[0, 7, 7],
     }
 ```
 
-**Scoring a submission file:**
+### Scoring a submission file:
 
 To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competitions/abstraction-and-reasoning-challenge/overview/evaluation):
 
@@ -83,7 +83,7 @@ To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competiti
     )
 ```
 
-**Creating visualisations:**
+## 🖼️ Creating visualisations
 
 The `arckit.vis` submodule provides useful functions for creating vector graphics visualisations of tasks, using the `drawsvg` module. The docstrings for these functions provide more detailed information as well as additional options.
 
@@ -95,9 +95,20 @@ The `arckit.vis` submodule provides useful functions for creating vector graphic
 
 ![Example of arckit visualisation](./images/grid_example.png)
 
-TODO: Task visualisation.
+When drawing tasks, arckit will intelligently resize all of the grids such that the total size of the illustration does not exceed the chosen width/height.
+
+```python
+>>> task = vis.draw_task(train_set[0], width=10, height=6, label='Example')
+>>> vis.output_drawing(grid, "images/arcshow_example.png") # svg/pdf/png
+```
+
+![Example of arckit output](./images/arcsave_example.png)
 
 ## 💻 Command-line tools
+
+`arcshow` draws a visualisation of a specific task straight to the console:
+
+![Example of arcshow command output (with colours)](./images/arcshow_example.png)
 
 `arcsave` saves a visualisation of a specific task to a file (pdf/svg/png), and is useful for inspecting tasks or producing high quality graphics showing specific tasks (e.g. for a paper). Tasks can be specified by their hex ID or by dataset, e.g. `train0`.
 
@@ -117,10 +128,6 @@ optional arguments:
   ```
 
 ![Example of arcsave command output](./images/arcsave_example.png)
-
-`arcshow` draws a visualisation of a specific task straight to the console:
-
-![Example of arcshow command output (with colours)](./images/arcshow_example.png)
 
 ## 💡 Contributions
 
