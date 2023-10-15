@@ -1,6 +1,7 @@
 import drawsvg
 import numpy as np
 import io
+import rich
 
 cmap = [
     '#252525', # black
@@ -262,3 +263,61 @@ def output_drawing(d: drawsvg.Drawing, filename: str, context=None):
         cairosvg.svg2pdf(bytestring=buffer.getvalue(), write_to=filename)
     else:
         raise ValueError(f'Unknown file extension for {filename}')
+    
+def print_grid(grid: drawsvg.Drawing):
+    """
+    Print a grid to the terminal
+    
+    Parameters
+    ----------
+    grid : drawsvg.Drawing
+        The grid to print
+    """
+    CELL_WIDTH = 2
+
+    def get_color(color_str):
+        color_str = color_str.strip('#')
+        return rich.color.Color.from_rgb(*bytes.fromhex(color_str))
+    
+    # Translate 'cmap' to rich style with respective color as background
+    rich_scmap = {
+        cstring:rich.style.Style(bgcolor=get_color(cstring))
+        for cstring in cmap
+    }
+ 
+    # Process drawsvg rectangles that have a 'fill' color, ignore other elements
+    table_data = []
+    max_x = 0
+    max_y = 0 
+    for element in grid.elements:
+        if not isinstance(element, drawsvg.elements.Rectangle):
+            continue
+        
+        if not element.args.get('fill') or element.args.get('fill') == 'none':
+            continue
+
+        width = element.args['width']
+        height = element.args['height']
+        
+        x = round(element.args['x'] / width)
+        y = round(element.args['y'] / height)
+        max_x = max_x if max_x > x else x
+        max_y = max_y if max_y > y else y
+        
+        table_data.append(
+            {'x':x, 'y':y, 'style':rich_scmap[element.args['fill']]}
+        )
+
+    # Allocate table
+    table = rich.table.Table.grid(expand=False)
+    for x in range(0, max_x+1):
+        table.add_column()
+        table.columns[x]._cells = [''] * (max_y+1)
+
+    table.rows = [rich.table.Row()]*(max_x+1)
+
+    # Populate rich table
+    for data in table_data:
+        x, y, fill = data['x'], data['y'], data['style'] 
+        table.columns[x]._cells[y] = rich.text.Text(' '*CELL_WIDTH,style=fill)
+    rich.print(table)
