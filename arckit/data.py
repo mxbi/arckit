@@ -240,15 +240,28 @@ class TaskSet:
         
 
 def load_data() -> (TaskSet, TaskSet):
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
+    train_data = json.load(open(f"{os.path.dirname(__file__)}/arc-agi_training_challenges.json"))
+    train_solutions = json.load(open(f"{os.path.dirname(__file__)}/arc-agi_training_solutions.json"))
+    eval_data = json.load(open(f"{os.path.dirname(__file__)}/arc-agi_evaluation_challenges.json"))
+    eval_solutions = json.load(open(f"{os.path.dirname(__file__)}/arc-agi_evaluation_solutions.json"))
     train_tasks = []
     eval_tasks = []
-    for id, task in data['train'].items():
+    
+    for id in train_data:
+        task = train_data[id]
+        solution = train_solutions[id]
+        
+        for i in range(len(solution)):
+            task['test'][i]['output'] = solution[i]
         train_tasks.append(Task(id, task['train'], task['test'], 'train'))
-
-    for id, task in data['eval'].items():
-        eval_tasks.append(Task(id, task['train'], task['test'], 'eval'))
-
+    
+    for id in eval_data:
+        task = eval_data[id]
+        solution = eval_solutions[id]
+        for i in range(len(solution)):
+            task['test'][i]['output'] = solution[i]
+        eval_tasks.append(Task(id, task['train'], task['test'], 'train'))
+        
     return TaskSet(train_tasks), TaskSet(eval_tasks)
 
 def load_single(id: str) -> Task:
