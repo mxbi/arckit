@@ -237,43 +237,82 @@ class TaskSet:
             return total_score, correct
         else:
             return total_score
-        
 
-def load_data() -> (TaskSet, TaskSet):
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
-    train_tasks = []
-    eval_tasks = []
-    for id, task in data['train'].items():
-        train_tasks.append(Task(id, task['train'], task['test'], 'train'))
+def load_data(version='latest') -> (TaskSet, TaskSet):
+    
+    def create_TaskSet(path):
+        tasks = []
+        dataset = 'train' if 'training' in path else 'eval'
+        for f_name in glob(f'{path}/*.json'):
+            id =  os.path.basename(f_name).split('.')[0]
+            task = json.load(open(f_name))
+            tasks.append(Task(id, task['train'], task['test'], dataset))
+        return tasks
+    
+    if version == 'latest':
+        train_tasks = create_TaskSet(f"{os.path.dirname(__file__)}/data/arcagi/training")
+        eval_tasks = create_TaskSet(f"{os.path.dirname(__file__)}/data/arcagi/evaluation")
+        return TaskSet(train_tasks), TaskSet(eval_tasks)
+    
+    elif version =='kaggle':
+        train_tasks = create_TaskSet(f"{os.path.dirname(__file__)}/data/kaggle/training")
+        eval_tasks = create_TaskSet(f"{os.path.dirname(__file__)}/data/kaggle/evaluation")
+        return TaskSet(train_tasks), TaskSet(eval_tasks)
+    
+    elif version == 'arc':
+        data = json.load(open(f"{os.path.dirname(__file__)}/data/original/arc1.json"))
+        train_tasks = []
+        eval_tasks = []
+        for id, task in data['train'].items():
+            train_tasks.append(Task(id, task['train'], task['test'], 'train'))
 
-    for id, task in data['eval'].items():
-        eval_tasks.append(Task(id, task['train'], task['test'], 'eval'))
+        for id, task in data['eval'].items():
+            eval_tasks.append(Task(id, task['train'], task['test'], 'eval'))
 
     return TaskSet(train_tasks), TaskSet(eval_tasks)
 
-def load_single(id: str) -> Task:
+
+def load_single(id: str, version='latest') -> Task:
     """
     Load a single task from disk.
     """
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
-    # task = data['train'][id]
-    # return Task(id, task['train'], task['test'], 'train'
-    if id.startswith('train'):
-        dataset_tasks = sorted(data['train'].items())
-        taskid, task = dataset_tasks[int(id[5:])]
-        return Task(taskid, task['train'], task['test'], 'train')
-    elif id.startswith('eval'):
-        dataset_tasks = sorted(data['eval'].items())
-        taskid, task = dataset_tasks[int(id[4:])]
-        return Task(taskid, task['train'], task['test'], 'eval')
-    elif id in data['train']:
-        task = data['train'][id]
-        return Task(id, task['train'], task['test'], 'train')
-    elif id in data['eval']:
-        task = data['eval'][id]
+    
+    def find_file_by_name(filename):
+        search_pattern = os.path.join(f"{os.path.dirname(__file__)}/data/arcagi/training", '**', f"{filename}.json")
+        result = glob(search_pattern, recursive=True)
+        if len(result) == 0:
+            search_pattern = os.path.join(f"{os.path.dirname(__file__)}/data/arcagi/evaluation", '**', f"{filename}.json")
+            result = glob(search_pattern, recursive=True) 
+        return result[0] if result else None
+
+    if version =='original':
+        data = json.load(open(f"{os.path.dirname(__file__)}/data/original/arc1.json"))
+        # task = data['train'][id]
+        # return Task(id, task['train'], task['test'], 'train'
+        if id.startswith('train'):
+            dataset_tasks = sorted(data['train'].items())
+            taskid, task = dataset_tasks[int(id[5:])]
+            return Task(taskid, task['train'], task['test'], 'train')
+        elif id.startswith('eval'):
+            dataset_tasks = sorted(data['eval'].items())
+            taskid, task = dataset_tasks[int(id[4:])]
+            return Task(taskid, task['train'], task['test'], 'eval')
+        elif id in data['train']:
+            task = data['train'][id]
+            return Task(id, task['train'], task['test'], 'train')
+        elif id in data['eval']:
+            task = data['eval'][id]
+            return Task(id, task['train'], task['test'], 'eval')
+        else:
+            raise ValueError(f"Unknown task id: {id}")
+        
+    elif version=='latest':
+        task_path = find_file_by_name(id)
+        if task_path == None:
+            raise ValueError(f"Unknown task id: {id}")
+        
+        task = json.load(open(task_path))
         return Task(id, task['train'], task['test'], 'eval')
-    else:
-        raise ValueError(f"Unknown task id: {id}")
 
 if __name__ == "__main__":
     train_tasks, eval_tasks = load_data()
