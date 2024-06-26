@@ -238,9 +238,20 @@ class TaskSet:
         else:
             return total_score
         
+        
+def load_data(version="latest") -> (TaskSet, TaskSet):
+    """
+    Load training and evaluation tasks.
 
-def load_data() -> (TaskSet, TaskSet):
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
+    Parameters:
+    version (str): Specify the version of the data file to load. 
+                   Use "latest" for latest version on the official repo (default) or "original" for original dataset.
+    
+    Returns:
+    (TaskSet, TaskSet): A tuple containing the training and evaluation TaskSets.
+    """
+    file_name = "arc_latest.json" if version == "latest" else "arc1.json"
+    data = json.load(open(f"{os.path.dirname(__file__)}/{file_name}"))
     train_tasks = []
     eval_tasks = []
     for id, task in data['train'].items():
@@ -251,13 +262,13 @@ def load_data() -> (TaskSet, TaskSet):
 
     return TaskSet(train_tasks), TaskSet(eval_tasks)
 
-def load_single(id: str) -> Task:
+
+def load_single(id: str, version="latest") -> Task:
     """
     Load a single task from disk.
     """
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
-    # task = data['train'][id]
-    # return Task(id, task['train'], task['test'], 'train'
+    file_name = "arc_latest.json" if version == "latest" else "arc1.json"
+    data = json.load(open(f"{os.path.dirname(__file__)}/{file_name}"))
     if id.startswith('train'):
         dataset_tasks = sorted(data['train'].items())
         taskid, task = dataset_tasks[int(id[5:])]
