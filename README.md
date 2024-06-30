@@ -4,13 +4,15 @@
 
 ![Example visualisation of ARC grids](./images/allgrids10.svg)
 
-Python and command-line tools for easily working with the **Abstraction &amp; Reasoning Corpus** (ARC) dataset. 
+Python and command-line tools for easily working with the **Abstraction &amp; Reasoning Corpus** (ARC-AGI, formerly ARC) dataset. 
 
 ```bash
-pip install arckit
+pip install -U arckit
 ```
 
 Arckit provides tools for loading the data in a friendly format (without a separate download!), visualizing the data with high-quality vector graphics, and evaluating models on the dataset.
+
+✨ **NEW in v0.1:** Dataset updated to the latest ARC-AGI and Kaggle datasets with `version` parameter.
 
 ## 🐍 Python API
 
@@ -82,6 +84,14 @@ To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competiti
     return_correct=False # Whether to return a list of which tasks were solved
     )
 ```
+
+### Loading a specific dataset version
+
+The ARC-AGI dataset has had [several minor bugfixes](https://github.com/fchollet/ARC-AGI/commits/master/) since original release. By default, the `latest` version is loaded, but you can specify a `version` parameter to both `load_data` and `load_single`. The version options are:
+
+- `latest`, `arcagi`: The latest version of ARC-AGI (also pinned as `aa922be`)
+- `kaggle`, `kaggle2024`: The data for the 2024 Kaggle competition
+- `arc`, `kaggle2019`: The original ARC data, as in the 2019 Kaggle competition
 
 ## 🖼️ Creating visualisations
 
