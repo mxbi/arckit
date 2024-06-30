@@ -1,11 +1,7 @@
-from glob import glob
 import json
 import numpy as np
 import os
 import csv
-
-from rich.traceback import install
-install()#(show_locals=True)
 
 from rich import print
 from rich.panel import Panel
