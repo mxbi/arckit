@@ -40,8 +40,9 @@ def fmt_grid(grid, colour=True, spaces=True):
         return Text.assemble(*grid_str[:-1])
 
 class Task:
-    def __init__(self, id, train, test, dataset=None):
+    def __init__(self, id, train, test, dataset=None, version=None):
         self.dataset = dataset
+        self.version = version
         self.id = id
         self.train = [(np.array(example['input']), np.array(example['output'])) for example in train]
         self.test = [(np.array(example['input']), np.array(example['output'])) for example in test]
@@ -237,41 +238,64 @@ class TaskSet:
             return total_score, correct
         else:
             return total_score
-        
 
-def load_data() -> (TaskSet, TaskSet):
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
+def get_data_json(version):
+    if version in ['latest', 'arcagi', 'aa922be']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi_aa922be.json"))
+    
+    elif version in ['kaggle', 'kaggle2024']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2024.json"))
+    
+    elif version in ['arc', 'kaggle2019']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/arc1.json"))
+    
+    else:
+        raise ValueError(f"Unknown ARC dataset version: {version}")
+
+def load_data(version='latest') -> (TaskSet, TaskSet):
+    """
+    Load the ARC dataset from disk. Optionally, specify a specific version of the dataset to load.
+    """
+
+    data = get_data_json(version)
+        
     train_tasks = []
     eval_tasks = []
     for id, task in data['train'].items():
-        train_tasks.append(Task(id, task['train'], task['test'], 'train'))
+        train_tasks.append(Task(id, task['train'], task['test'], 'train', version=version))
 
     for id, task in data['eval'].items():
-        eval_tasks.append(Task(id, task['train'], task['test'], 'eval'))
+        eval_tasks.append(Task(id, task['train'], task['test'], 'eval', version=version))
 
     return TaskSet(train_tasks), TaskSet(eval_tasks)
 
-def load_single(id: str) -> Task:
+
+def load_single(id: str, version='latest') -> Task:
     """
-    Load a single task from disk.
+    Load a single task from disk. IDs are of the form 'train0', 'eval14', '007bbfb7', etc.
+    Note that if iterating through tasks, it is more efficient to use load_data() and index into it.
+
+    Optionally, specify a specific version of the dataset to load.
     """
-    data = json.load(open(f"{os.path.dirname(__file__)}/arc1.json"))
+
+    data = get_data_json(version)
+        
     # task = data['train'][id]
     # return Task(id, task['train'], task['test'], 'train'
     if id.startswith('train'):
         dataset_tasks = sorted(data['train'].items())
         taskid, task = dataset_tasks[int(id[5:])]
-        return Task(taskid, task['train'], task['test'], 'train')
+        return Task(taskid, task['train'], task['test'], 'train', version=version)
     elif id.startswith('eval'):
         dataset_tasks = sorted(data['eval'].items())
         taskid, task = dataset_tasks[int(id[4:])]
-        return Task(taskid, task['train'], task['test'], 'eval')
+        return Task(taskid, task['train'], task['test'], 'eval', version=version)
     elif id in data['train']:
         task = data['train'][id]
-        return Task(id, task['train'], task['test'], 'train')
+        return Task(id, task['train'], task['test'], 'train', version=version)
     elif id in data['eval']:
         task = data['eval'][id]
-        return Task(id, task['train'], task['test'], 'eval')
+        return Task(id, task['train'], task['test'], 'eval', version=version)
     else:
         raise ValueError(f"Unknown task id: {id}")
 
