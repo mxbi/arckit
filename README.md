@@ -33,7 +33,7 @@ Arckit provides tools for loading the data in a friendly format (without a separ
 True
 
 # You can load specific tasks by ID
->>> task = arckit.load_task('007bbfb7')
+>>> task = arckit.load_single('007bbfb7')
 ```
 
 ### Interacting with tasks
