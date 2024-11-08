@@ -109,7 +109,7 @@ When drawing tasks, arckit will intelligently resize all of the grids such that 
 
 ```python
 >>> task = vis.draw_task(train_set[0], width=10, height=6, label='Example')
->>> vis.output_drawing(grid, "images/arcshow_example.png") # svg/pdf/png
+>>> vis.output_drawing(task, "images/arcshow_example.png") # svg/pdf/png
 ```
 
 ![Example of arckit output](./images/arcsave_example.png)
