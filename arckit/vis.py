@@ -16,7 +16,7 @@ cmap = [
     '#FFFFFF'
         ]
 
-bg_color = '#FFFFFF' # White
+bg_color = '#EEEFF6' # White
 
 def draw_grid(grid, xmax=10, ymax=10, padding=.5, extra_bottom_padding=0.5, group=False, add_size=True, label='', bordercol='#111111ff'):
     """
