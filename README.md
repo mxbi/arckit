@@ -80,7 +80,7 @@ To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competiti
 ```python
 >>> eval_set.score_submission(
     'submission.csv', # Submission with two columns output_id,output in Kaggle fomrat
-    topn=3,           # How many predictions to consider (default: 3)
+    topn=2,           # How many predictions to consider (default: 2)
     return_correct=False # Whether to return a list of which tasks were solved
     )
 ```

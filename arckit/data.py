@@ -185,7 +185,7 @@ class TaskSet:
     def __repr__(self):
         return f"<TaskSet: {len(self.tasks)} tasks>"
 
-    def score_submission(self,fn: str, topn=3, return_correct=False) -> int:
+    def score_submission(self,fn: str, topn=2, return_correct=False) -> int:
         """
         Score a submission file, in Kaggle csv format
         Two columns: output_id,output
