@@ -185,7 +185,7 @@ class TaskSet:
     def __repr__(self):
         return f"<TaskSet: {len(self.tasks)} tasks>"
 
-    def score_submission(self,fn: str, topn=3, return_correct=False) -> int:
+    def score_submission(self,fn: str, topn=2, return_correct=False) -> int:
         """
         Score a submission file, in Kaggle csv format
         Two columns: output_id,output
@@ -236,10 +236,17 @@ class TaskSet:
             return total_score
 
 def get_data_json(version):
-    if version in ['latest', 'arcagi', 'aa922be']:
+    version = version.lower()
+    if version in ['latest', 'arcagi2', 'f3283f7']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi2_f3283f7.json"))
+
+    elif version in ['arcagi', 'aa922be', 'arcagi1', 'arc-agi-1', 'arc-agi']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi_aa922be.json"))
     
-    elif version in ['kaggle', 'kaggle2024']:
+    elif version in ['kaggle', 'kaggle2025', 'kaggle250808']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2025_250808.json"))
+
+    elif version in ['kaggle2024']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2024.json"))
     
     elif version in ['arc', 'kaggle2019']:
@@ -248,7 +255,7 @@ def get_data_json(version):
     else:
         raise ValueError(f"Unknown ARC dataset version: {version}")
 
-def load_data(version='latest') -> (TaskSet, TaskSet):
+def load_data(version='latest') -> tuple[TaskSet, TaskSet]:
     """
     Load the ARC dataset from disk. Optionally, specify a specific version of the dataset to load.
     """

@@ -4,7 +4,7 @@
 
 ![Example visualisation of ARC grids](./images/allgrids10.svg)
 
-Python and command-line tools for easily working with the **Abstraction &amp; Reasoning Corpus** (ARC-AGI, formerly ARC) dataset. 
+Python and command-line tools for easily working with the ARC, ARC-AGI & ARC-AGI-2 datasets. 
 
 ```bash
 pip install -U arckit
@@ -12,7 +12,7 @@ pip install -U arckit
 
 Arckit provides tools for loading the data in a friendly format (without a separate download!), visualizing the data with high-quality vector graphics, and evaluating models on the dataset.
 
-✨ **NEW in v0.1:** Dataset updated to the latest ARC-AGI and Kaggle datasets with `version` parameter.
+✨ **NEW in v1.0:** Added ARC-AGI-2 & ARC Prize 2025 Data, updated evaluation ruleset.
 
 ## 🐍 Python API
 
@@ -20,7 +20,9 @@ Arckit provides tools for loading the data in a friendly format (without a separ
 
 ```python
 >>> import arckit
->>> train_set, eval_set = arckit.load_data() # Load ARC1 train/eval
+>>> train_set, eval_set = arckit.load_data() # Load ARC-AGI-2 train/eval.
+>>> train_set, eval_set = arckit.load_data("kaggle") # Load ARC Prize 2025
+>>> train_set, eval_set = arckit.load_data("arcagi") # Load latest ARC-AGI-1
 
 # TaskSets are iterable and indexable
 >>> train_set 
@@ -80,18 +82,26 @@ To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competiti
 ```python
 >>> eval_set.score_submission(
     'submission.csv', # Submission with two columns output_id,output in Kaggle fomrat
-    topn=3,           # How many predictions to consider (default: 3)
+    topn=2,           # How many predictions to consider (default: 2)
     return_correct=False # Whether to return a list of which tasks were solved
     )
 ```
 
+> **Note:** the default `topn` was changed from 3 to 2 in v1.0 to match changes in the official evaluation.
+
 ### Loading a specific dataset version
 
-The ARC-AGI dataset has had [several minor bugfixes](https://github.com/fchollet/ARC-AGI/commits/master/) since original release. By default, the `latest` version is loaded, but you can specify a `version` parameter to both `load_data` and `load_single`. The version options are:
+The ARC-AGI datasets have had [several bugfixes](https://github.com/arcprize/ARC-AGI-2/blob/main/changelog.md) since original release. Additionally, a new ARC-AGI-2 dataset has been released for competitions starting in 2025. By default, the `latest` version of ARC-AGI-2 is loaded, but you can specify a `version` parameter to both `load_data` and `load_single` to load other datasets. 
 
-- `latest`, `arcagi`: The latest version of ARC-AGI (also pinned as `aa922be`)
-- `kaggle`, `kaggle2024`: The data for the 2024 Kaggle competition
-- `arc`, `kaggle2019`: The original ARC data, as in the 2019 Kaggle competition
+**The version options are:**
+
+- `latest`, `arcagi2`: The latest version of the ARC-AGI-2 dataset (currently: `f3283f7`)
+- `arcagi`: The latest version of the ARC-AGI dataset (currently: `aa922be`)
+- `kaggle`, `kaggle2025`: The data for the 2025 Kaggle competition based on ARC-AGI-2 (currently: `kaggle250808`)
+- `kaggle2024`: The data for the 2024 Kaggle competition based on ARC-AGI (pinned)
+- `arc`, `kaggle2019`: The original ARC data, as in the 2019 Kaggle competition (pinned)
+
+> **Note:** You may wish to pin your data to a specific version number to avoid underlying data changes during research. To do this, use the most specific name available when loading data, or pin the installed version of `arckit` in your environment.
 
 ## 🖼️ Creating visualisations
 
@@ -113,6 +123,21 @@ When drawing tasks, arckit will intelligently resize all of the grids such that 
 ```
 
 ![Example of arckit output](./images/arcsave_example.png)
+
+Alternatively, the `print_grid` function outputs a grid directly to the terminal without creating any files. Note that it takes a numpy array as input, which is the standard grid format for a *Task*.
+
+```python
+>>> task = train_set[0] # Get the first task
+>>> for i, (input_array, output_array) in enumerate(task.train): # Loop through the training examples
+>>>     print(f"Training Example {i+1}")
+>>>     print("Input:")
+>>>     vis.print_grid(input_array)
+>>>     print("Output:")
+>>>     vis.print_grid(output_array)
+>>>     print()
+```
+
+![Example of print grid in terminal](./images/arc_terminal_print_grid_example.png | width=200)
 
 ## 💻 Command-line tools
 
@@ -145,4 +170,4 @@ Any relevant contributions are very welcome! Please feel free to open an issue o
 
 ## 📜 Acknowledgements
 
-The ARC dataset was graciously released by Francois Chollet under [Apache 2.0](https://github.com/fchollet/ARC/blob/master/LICENSE) and can be found in original format in [this repository](https://github.com/fchollet/ARC). The dataset is reproduced within the `arckit` package under the same license.
+The ARC and ARC-AGI-2 datasets was graciously released by Francois Chollet under [Apache 2.0](https://github.com/fchollet/ARC/blob/master/LICENSE) and can be found in original format in [these](https://github.com/fchollet/ARC) [repositories](https://github.com/arcprize/ARC-AGI-2).  The dataset is reproduced within the `arckit` package under the same license.

@@ -1,6 +1,7 @@
 import drawsvg
 import numpy as np
 import io
+import rich
 
 cmap = [
     '#252525', # black
@@ -271,3 +272,44 @@ def output_drawing(d: drawsvg.Drawing, filename: str, context=None):
         cairosvg.svg2pdf(bytestring=buffer.getvalue(), write_to=filename)
     else:
         raise ValueError(f'Unknown file extension for {filename}')
+
+def print_grid(grid: np.ndarray):
+    """
+    Print a grid to the terminal using rich library
+
+    Parameters
+    ----------
+    grid : np.ndarray
+        the standard grid format for Task 
+    """
+    CELL_WIDTH = 2
+
+    def get_color(color_str):
+        color_str = color_str.strip('#')
+        return rich.color.Color.from_rgb(*bytes.fromhex(color_str))
+
+    # Translate 'cmap' to rich style with respective color as background
+    rich_scmap = {
+        i: rich.style.Style(bgcolor=get_color(color))
+        for i, color in enumerate(cmap)
+    }
+
+    # Create and populate rich table
+    table = rich.table.Table.grid(expand=False)
+    
+    height, width = grid.shape
+    
+    # Add columns
+    for x in range(width):
+        table.add_column()
+        table.columns[x]._cells = [''] * height
+    
+    table.rows = [rich.table.Row()] * height
+
+    # Populate cells
+    for y in range(height):
+        for x in range(width):
+            color_idx = grid[y, x]
+            table.columns[x]._cells[y] = rich.text.Text(' ' * CELL_WIDTH, style=rich_scmap[color_idx])
+
+    rich.print(table)
