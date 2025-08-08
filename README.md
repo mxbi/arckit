@@ -87,10 +87,12 @@ To evaluate a submission in [Kaggle ARC format](https://www.kaggle.com/competiti
 
 ### Loading a specific dataset version
 
-The ARC-AGI dataset has had [several minor bugfixes](https://github.com/fchollet/ARC-AGI/commits/master/) since original release. By default, the `latest` version is loaded, but you can specify a `version` parameter to both `load_data` and `load_single`. The version options are:
+The ARC-AGI dataset has had [several minor bugfixes](https://github.com/fchollet/ARC-AGI/commits/master/) since original release. Additionally, a new ARC-AGI-2 dataset has been released for competitions starting in 2025. By default, the `latest` version of ARC-AGI-2 is loaded, but you can specify a `version` parameter to both `load_data` and `load_single` to load other datasets. The version options are:
 
-- `latest`, `arcagi`: The latest version of ARC-AGI (also pinned as `aa922be`)
-- `kaggle`, `kaggle2024`: The data for the 2024 Kaggle competition
+- `latest`, `arcagi2`: The latest version of the ARC-AGI-2 dataset
+- `arcagi`: The latest version of the ARC-AGI dataset (also pinned as `aa922be`)
+- `kaggle`, `kaggle2025`: The data for the 2025 Kaggle competition based on ARC-AGI-2
+- `kaggle2024`: The data for the 2024 Kaggle competition based on ARC-AGI
 - `arc`, `kaggle2019`: The original ARC data, as in the 2019 Kaggle competition
 
 ## 🖼️ Creating visualisations
