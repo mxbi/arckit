@@ -236,10 +236,11 @@ class TaskSet:
             return total_score
 
 def get_data_json(version):
+    version = version.lower()
     if version in ['latest', 'arcagi2', 'f3283f7']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi2_f3283f7.json"))
 
-    elif version in ['arcagi', 'aa922be']:
+    elif version in ['arcagi', 'aa922be', 'arcagi1', 'arc-agi-1', 'arc-agi']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi_aa922be.json"))
     
     elif version in ['kaggle', 'kaggle2025', 'kaggle250808']:
