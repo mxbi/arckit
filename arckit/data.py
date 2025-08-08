@@ -236,14 +236,14 @@ class TaskSet:
             return total_score
 
 def get_data_json(version):
-    if version in ['latest', 'arcagi2']:
-        return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi2.json"))
+    if version in ['latest', 'arcagi2', 'f3283f7']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi2_f3283f7.json"))
 
     elif version in ['arcagi', 'aa922be']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/arcagi_aa922be.json"))
     
-    elif version in ['kaggle', 'kaggle2025']:
-        return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2025.json"))
+    elif version in ['kaggle', 'kaggle2025', 'kaggle250808']:
+        return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2025_250808.json"))
 
     elif version in ['kaggle2024']:
         return json.load(open(f"{os.path.dirname(__file__)}/data/kaggle2024.json"))
@@ -254,7 +254,7 @@ def get_data_json(version):
     else:
         raise ValueError(f"Unknown ARC dataset version: {version}")
 
-def load_data(version='latest') -> (TaskSet, TaskSet):
+def load_data(version='latest') -> tuple[TaskSet, TaskSet]:
     """
     Load the ARC dataset from disk. Optionally, specify a specific version of the dataset to load.
     """
