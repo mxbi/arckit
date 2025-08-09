@@ -124,7 +124,7 @@ When drawing tasks, arckit will intelligently resize all of the grids such that 
 
 ![Example of arckit output](./images/arcsave_example.png)
 
-Alternatively, the `print_grid` function outputs a grid directly to the terminal without creating any files. Note that it takes a numpy array as input, which is the standard grid format for a *Task*.
+Alternatively, the `print_grid` function outputs a grid directly to the terminal without creating any files.
 
 ```python
 >>> task = train_set[0] # Get the first task
@@ -137,7 +137,7 @@ Alternatively, the `print_grid` function outputs a grid directly to the terminal
 >>>     print()
 ```
 
-![Example of print grid in terminal](./images/arc_terminal_print_grid_example.png | width=200)
+<img src="./images/arc_terminal_print_grid_example.png" width="200">
 
 ## 💻 Command-line tools
 
