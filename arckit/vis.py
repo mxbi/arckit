@@ -17,6 +17,8 @@ cmap = [
     '#FFFFFF'
         ]
 
+bg_color = '#EEEFF6' # White
+
 def draw_grid(grid, xmax=10, ymax=10, padding=.5, extra_bottom_padding=0.5, group=False, add_size=True, label='', bordercol='#111111ff'):
     """
     Draws a grid, 
@@ -66,6 +68,12 @@ def draw_grid(grid, xmax=10, ymax=10, padding=.5, extra_bottom_padding=0.5, grou
         drawing = drawsvg.Group()
     else:
         drawing = drawsvg.Drawing(xsize+padding, ysize+padding+extra_bottom_padding, origin=(-0.5*padding, -0.5*padding))
+        # Add background rectangle first
+        drawing.append(drawsvg.Rectangle(
+            -0.5*padding, -0.5*padding,                          # x, y position with extra padding
+            xsize+padding, ysize+padding+extra_bottom_padding,   # width, height with padding
+            fill=bg_color                                        # background color `bg_color`
+        ))
         drawing.set_pixel_scale(40)
     # drawing = drawsvg.Group()
     for j, row in enumerate(grid):
