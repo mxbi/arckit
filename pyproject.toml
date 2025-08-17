@@ -1,4 +1,47 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "arckit"
+version = "0.1.0"
+description = "Tools for working with the Abstraction & Reasoning Corpus (ARC-AGI)"
+readme = "README.md"
+authors = [
+    {name = "Mikel Bober-Irizar", email = "mikel@mxbi.net"}
+]
+license = "Apache-2.0"
+requires-python = ">=3.8"
+keywords = ["arc", "agi", "reasoning", "abstraction"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy",
+    "rich",
+    "drawsvg",
+]
+
+[project.urls]
+Homepage = "https://github.com/mxbi/arckit"
+Repository = "https://github.com/mxbi/arckit"
+Issues = "https://github.com/mxbi/arckit/issues"
+
+[project.scripts]
+arctask = "arckit.cli:taskprint"
+arcsave = "arckit.cli:tasksave"
+
+[tool.setuptools.packages.find]
+include = ["arckit*"]
+exclude = ["arckit.__pycache__*"]
+
+[tool.setuptools.exclude-package-data]
+arckit = ["__pycache__/*", "*.py[co]"]
