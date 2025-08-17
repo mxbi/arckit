@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
     {name = "Mikel Bober-Irizar", email = "mikel@mxbi.net"}
 ]
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
 requires-python = ">=3.8"
 keywords = ["arc", "agi", "reasoning", "abstraction"]
 classifiers = [
@@ -42,6 +42,9 @@ arcsave = "arckit.cli:tasksave"
 [tool.setuptools.packages.find]
 include = ["arckit*"]
 exclude = ["arckit.__pycache__*"]
+
+[tool.setuptools.package-data]
+arckit = ["data/*.json"]
 
 [tool.setuptools.exclude-package-data]
 arckit = ["__pycache__/*", "*.py[co]"]
