@@ -45,6 +45,8 @@ jobs:
     name: Publish to PyPI
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Download dists artifact
