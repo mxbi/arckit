@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arckit"
-version = "1.0.0"
+version = "1.0.1" # Remember to change in __init__.py
 description = "Tools for working with the Abstraction & Reasoning Corpus (ARC-AGI)"
 readme = "README.md"
 authors = [
