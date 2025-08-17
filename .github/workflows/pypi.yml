@@ -1,23 +1,21 @@
-name: Publish to TestPyPI
+name: Build & Release
 
 on:
   workflow_dispatch:
     inputs:
-      python_version:
-        description: Python version to use for building
-        required: false
-        default: "3.11"
-      skip_existing:
-        description: Skip uploading files that already exist on TestPyPI
-        required: false
-        default: "true"
+      environment:
+        description: 'Choose PyPI environment'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+        - test
+        - production
   push:
-    tags:
-      - "test-v*"
 
 jobs:
   build:
-    name: Build sdist and wheel
+    name: Build wheel
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,9 +42,10 @@ jobs:
           path: dist/
 
   publish:
-    name: Publish to TestPyPI
+    name: Publish to PyPI
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Download dists artifact
         uses: actions/download-artifact@v4
@@ -54,7 +53,12 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Publish package distributions to TestPyPI
+      - name: Publish to TestPyPI
+        if: inputs.environment == 'test'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+
+      - name: Publish to Production PyPI
+        if: inputs.environment == 'production'
+        uses: pypa/gh-action-pypi-publish@release/v1
